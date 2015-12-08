@@ -98,6 +98,7 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     //MARK: UIImagePickerControllerDelegate methods
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        //TODO: This code needs to change
         for object in info.values {
             if let image = object as? UIImage {
                 self.imagePickerView.image = image
