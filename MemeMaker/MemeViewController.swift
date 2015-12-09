@@ -33,6 +33,7 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     //MARK: variables
     var meme: Meme?
     var shiftView: Bool = false
+    var currentTextField: UITextField? = nil
     
     //MARK: ViewController Methods
     override func viewDidLoad() {
@@ -66,6 +67,8 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     //MARK: UI Action handlers
     @IBAction func pickButtonPressed(sender: UIBarButtonItem) {
         
+        self.forceKeyboardClosed()
+        
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
         pickerController.sourceType = .PhotoLibrary
@@ -75,6 +78,8 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     @IBAction func cameraButtonPressed(sender: UIBarButtonItem) {
         
+        self.forceKeyboardClosed()
+        
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
         pickerController.sourceType = .Camera
@@ -82,15 +87,21 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
     }
     @IBAction func actionButtonPressed(sender: UIBarButtonItem) {
+        
+        self.forceKeyboardClosed()
         let myMemeImage = self.generateMemedImage()
         
         let avc = UIActivityViewController(activityItems: [myMemeImage], applicationActivities: nil)
-        
+        avc.completionWithItemsHandler = {
+            (activity, success, items, error) in
+            self.saveMeme(myMemeImage)
+        }
         self.navigationController?.presentViewController(avc, animated: true, completion: nil)
         
     }
 
     @IBAction func cancelPressed(sender: UIBarButtonItem) {
+        self.forceKeyboardClosed()
         //reset the view
         self.initializeView()
     }
@@ -116,17 +127,17 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     //MARK: UITextDelegate Methods
     func textFieldDidBeginEditing(textField: UITextField) {
+        
         //If the default text is in the textField, clear it out when editing begins
         if textField == self.topTextField && textField.text == self.defaultTopText {
             textField.text = ""
         }
-        if textField == self.bottomTextField {
-            //Only set shiftView to true if the bottomTextField is in focus
-            self.shiftView = true
-            if textField.text == self.defaultBottomText {
-                textField.text = ""
-            }
+        if textField == self.bottomTextField && textField.text == self.defaultBottomText {
+            textField.text = ""
         }
+        
+        //Set the currentTextField appropriately
+        self.currentTextField = textField
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -136,7 +147,7 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        self.shiftView = false
+
         
         //If the text is in the textField is empty, add back the default text
         if textField == self.topTextField && textField.text!.isEmpty {
@@ -145,6 +156,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         if textField == self.bottomTextField && textField.text!.isEmpty {
             textField.text = self.defaultBottomText
         }
+        
+        //Unset the currentTextField
+        self.currentTextField = nil
         
     }
     
@@ -168,14 +182,20 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        if self.shiftView {
-            view.frame.origin.y -= getKeyboardHeight(notification)
+        //Only shift the view if the currentTextField is the bottomTextField
+        if let textField = self.currentTextField {
+            if textField == self.bottomTextField {
+                view.frame.origin.y -= getKeyboardHeight(notification)
+            }
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        if self.shiftView {
-            view.frame.origin.y += getKeyboardHeight(notification)
+        //Only shift the view if the currentTextField is the bottomTextField
+        if let textField = self.currentTextField {
+            if textField == self.bottomTextField {
+                view.frame.origin.y += getKeyboardHeight(notification)
+            }
         }
     }
     
@@ -214,7 +234,20 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.bottomTextField.text = self.defaultBottomText
         self.imagePickerView.image = nil
         self.actionButton.enabled = false
+        self.meme = nil
+        
+    }
     
+    func saveMeme(memeImage: UIImage) {
+        self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
+        //Proof that the Meme is being saved
+        print("Meme info: \(self.meme?.topText) \(self.meme?.bottomText) \(self.meme?.originalImage) \(self.meme?.memeImage)")
+    }
+    
+    func forceKeyboardClosed() {
+        if let textField = self.currentTextField {
+            textField.resignFirstResponder()
+        }
     }
 
 
