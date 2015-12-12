@@ -121,6 +121,7 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         if let image = info[keyString] as? UIImage {
             self.imagePickerView.image = image
+            self.actionButton.enabled = true
         }
 
         self.dismissViewControllerAnimated(true, completion: nil)
