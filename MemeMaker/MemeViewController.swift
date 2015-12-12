@@ -111,13 +111,10 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     //MARK: UIImagePickerControllerDelegate methods
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        //TODO: This code needs to change
-        for object in info.values {
-            if let image = object as? UIImage {
-                self.imagePickerView.image = image
-                self.actionButton.enabled = true
-                break
-            }
+        //Get the image from the info collection
+        if let image = info.values.first as? UIImage {
+            self.imagePickerView.image = image
+            self.actionButton.enabled = true
         }
         self.dismissViewControllerAnimated(true, completion: nil)
         
@@ -149,15 +146,6 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-
-        
-        //If the text is in the textField is empty, add back the default text
-        if textField == self.topTextField && textField.text!.isEmpty {
-            textField.text = self.defaultTopText
-        }
-        if textField == self.bottomTextField && textField.text!.isEmpty {
-            textField.text = self.defaultBottomText
-        }
         
         //Unset the currentTextField
         self.currentTextField = nil

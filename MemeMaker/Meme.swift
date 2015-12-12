@@ -9,12 +9,15 @@
 import Foundation
 import UIKit
 
-class Meme : NSObject {
+struct Meme {
+    
+    //Properties
     var topText: String
     var bottomText: String
     var originalImage: UIImage
     var memeImage: UIImage
     
+    //Constructor
     init(topText: String, bottomText: String, originalImage: UIImage, memeImage: UIImage) {
         
         self.topText = topText
@@ -23,6 +26,5 @@ class Meme : NSObject {
         self.memeImage = memeImage
         
     }
-    
     
 }
