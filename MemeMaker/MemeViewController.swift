@@ -111,11 +111,18 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     //MARK: UIImagePickerControllerDelegate methods
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        //Get the image from the info collection
-        if let image = info.values.first as? UIImage {
-            self.imagePickerView.image = image
-            self.actionButton.enabled = true
+        //Set the key string appropriately
+        var keyString: String!
+        if picker.allowsEditing {
+            keyString = UIImagePickerControllerEditedImage
+        } else {
+            keyString = UIImagePickerControllerOriginalImage
         }
+        
+        if let image = info[keyString] as? UIImage {
+            self.imagePickerView.image = image
+        }
+
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
