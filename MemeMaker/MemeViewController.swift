@@ -240,6 +240,11 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
         //Proof that the Meme is being saved
         print("Meme info: \(self.meme?.topText) \(self.meme?.bottomText) \(self.meme?.originalImage) \(self.meme?.memeImage)")
+        
+        // Add it to the memes array in the Application Delegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.memes.append(self.meme!)
+        
     }
     
     func forceKeyboardClosed() {
