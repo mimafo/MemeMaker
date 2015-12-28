@@ -23,6 +23,11 @@ class MemeCollectionViewController: UICollectionViewController {
         //Insert initialization code here
     }
     
+    override func viewWillAppear(animated: Bool) {
+        //This is temporary
+        self.collectionView?.reloadData()
+    }
+    
     //MARK: UICollectionViewDelegate and UICollectionViewDataSource protocol methods
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.memes.count;
@@ -31,12 +36,11 @@ class MemeCollectionViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         //let cell = collectionView.dequeueReusableCellWithReuseIdentifier(self.MemeCollectionCellTitle, forIndexPath: indexPath) as! CustomMemeCell
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(self.MemeCollectionCellTitle, forIndexPath: indexPath) 
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(self.MemeCollectionCellTitle, forIndexPath: indexPath) as! MemeCollectionViewCell
+        
+        //Get the current image and display it
         let meme = memes[indexPath.item]
-        //cell.setText(meme.top, bottomString: meme.bottom)
-        let imageView = meme.memeImage
-        //cell.backgroundView = imageView
-        print(imageView.description)
+        cell.imageView.image = meme.memeImage
         
         return cell
     }
@@ -60,7 +64,7 @@ class MemeCollectionViewController: UICollectionViewController {
         let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewController)
         let memeDetailVC = object as! MemeViewController
         
-        self.presentViewController(memeDetailVC, animated: true, completion: { self.collectionView!.reloadData() })
+        self.presentViewController(memeDetailVC, animated: true, completion: nil)
         
     }
 }

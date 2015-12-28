@@ -29,6 +29,11 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableView.dataSource = self
     }
     
+    override func viewWillAppear(animated: Bool) {
+        //This is temporary
+        self.tableView.reloadData()
+    }
+    
     
     //MARK: UITableViewDataSource and UITableViewDelegate methods
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -74,7 +79,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewController)
         let memeDetailVC = object as! MemeViewController
         
-        self.presentViewController(memeDetailVC, animated: true, completion: { self.tableView.reloadData() })
+        self.presentViewController(memeDetailVC, animated: true, completion: nil)
         
     }
 }
