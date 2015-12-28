@@ -11,7 +11,7 @@ import UIKit
 class MemeCollectionViewController: UICollectionViewController {
     
     //MARK: Constants
-    let MemeCollectionCellTitle = "MemeCollectionCell"
+    let MemeCollectionCellTitle = "MemeCollectionViewCell"
     let MemeDetailViewController = "MemeDetailViewController"
     
     //MARK: Readonly properties
@@ -54,4 +54,13 @@ class MemeCollectionViewController: UICollectionViewController {
         self.navigationController!.showViewController(memeDetailVC, sender: self)
     }
     
+    @IBAction func addPressed(sender: UIBarButtonItem) {
+        
+        //Grab the Meme ViewController from Storyboard
+        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewController)
+        let memeDetailVC = object as! MemeViewController
+        
+        self.presentViewController(memeDetailVC, animated: true, completion: { self.collectionView!.reloadData() })
+        
+    }
 }

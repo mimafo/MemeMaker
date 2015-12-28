@@ -74,6 +74,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewController)
         let memeDetailVC = object as! MemeViewController
         
-        self.presentViewController(memeDetailVC, animated: true, completion: nil)
+        self.presentViewController(memeDetailVC, animated: true, completion: { self.tableView.reloadData() })
+        
     }
 }

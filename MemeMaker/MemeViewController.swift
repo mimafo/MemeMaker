@@ -18,6 +18,7 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var toolbar: UIToolbar!
     @IBOutlet weak var actionButton: UIBarButtonItem!
+    @IBOutlet weak var addingTopToolbar: UIToolbar!
     
     
     //MARK: Constants
@@ -35,6 +36,11 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var shiftView: Bool = false
     var currentTextField: UITextField? = nil
     
+    //MARK: Readonly properties
+    var addMode: Bool {
+        return (self.navigationController == nil)
+    }
+    
     //MARK: ViewController Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +57,12 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         self.bottomTextField.defaultTextAttributes = self.memeTextAttributes
         self.bottomTextField.textAlignment = .Center
+        
+        //Add the add mode top tool bar buttons
+        if self.addMode {
+            self.addingTopToolbar.items?.append(UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "actionButtonPressed:"))
+            self.addingTopToolbar.items?.append(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelPressed:"))
+        }
         
     }
     
@@ -88,21 +100,34 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     @IBAction func actionButtonPressed(sender: UIBarButtonItem) {
         
+        //For change mode, call the add mode method
+        self.actionButtonPressed()
+        
+    }
+    
+    //MARK: Programmatic UI Action Handlers
+    @IBAction func actionButtonPressed() {
+        
         self.forceKeyboardClosed()
         let myMemeImage = self.generateMemedImage()
         
         let avc = UIActivityViewController(activityItems: [myMemeImage], applicationActivities: nil)
         avc.completionWithItemsHandler = {
             (activity, success, items, error) in
-            if success {
+            if success && self.addMode {
                 self.saveMeme(myMemeImage)
             }
         }
-        self.navigationController?.presentViewController(avc, animated: true, completion: nil)
+        
+        if self.navigationController == nil {
+            self.presentViewController(avc, animated: true, completion: nil)
+        } else {
+            self.navigationController?.presentViewController(avc, animated: true, completion: nil)
+        }
         
     }
-
-    @IBAction func cancelPressed(sender: UIBarButtonItem) {
+    
+    @IBAction func cancelPressed() {
         self.forceKeyboardClosed()
         //reset the view
         self.initializeView()
@@ -206,9 +231,11 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     //MARK: Helper methods
     func generateMemedImage() -> UIImage {
         
-        //Hide toolbar and navbar
+        //Hide toolbars, navbar, and tab bar
         self.toolbar.hidden = true
         self.navigationController?.navigationBar.hidden = true
+        self.addingTopToolbar.hidden = true
+        self.tabBarController?.tabBar.hidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -218,9 +245,11 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        //Show toolbar and navbar
+        //Show toolbars, navbar, and tab bar
         self.toolbar.hidden = false
         self.navigationController?.navigationBar.hidden = false
+        self.addingTopToolbar.hidden = false
+        self.tabBarController?.tabBar.hidden = false
         
         return memedImage
     }
@@ -238,12 +267,13 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func saveMeme(memeImage: UIImage) {
         self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
-        //Proof that the Meme is being saved
-        print("Meme info: \(self.meme?.topText) \(self.meme?.bottomText) \(self.meme?.originalImage) \(self.meme?.memeImage)")
         
         // Add it to the memes array in the Application Delegate
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.memes.append(self.meme!)
+        
+        //Close the view controller
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
