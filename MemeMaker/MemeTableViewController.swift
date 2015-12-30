@@ -13,7 +13,8 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     //MARK: Constants
     let MemeTableCellTitle = "MemeTableCell"
-    let MemeDetailViewController = "MemeDetailViewController"
+    let MemeDetailViewControllerID = "MemeDetailViewController"
+    let MemeEditViewControllerID = "MemeEditViewController"
     
     //MARK: Readonly properties
     var memes: [Meme] {
@@ -62,24 +63,24 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         //Grab the Meme ViewController from Storyboard
-        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewController)
-        let memeDetailVC = object as! MemeViewController
+        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewControllerID)
+        let vc = object as! MemeDetailViewController
         
         //Populate view controller with data from the selected item
-        memeDetailVC.meme = self.memes[indexPath.row]
+        vc.meme = self.memes[indexPath.row]
         
         //Present the view controller using navigation
-        self.navigationController!.showViewController(memeDetailVC, sender: self)
+        self.navigationController!.showViewController(vc, sender: self)
         
     }
     
     //MARK: Action Methods
     @IBAction func addPressed(sender: UIBarButtonItem) {
         //Grab the Meme ViewController from Storyboard
-        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewController)
-        let memeDetailVC = object as! MemeViewController
+        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeEditViewControllerID)
+        let vc = object as! MemeEditViewController
         
-        self.presentViewController(memeDetailVC, animated: true, completion: nil)
+        self.presentViewController(vc, animated: true, completion: nil)
         
     }
 }

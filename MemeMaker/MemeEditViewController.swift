@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate  {
+class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate  {
 
     //MARK: UI outlets
     @IBOutlet weak var photoPickButton: UIBarButtonItem!
@@ -16,9 +16,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var imagePickerView: UIImageView!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
-    @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var bottomToolbar: UIToolbar!
     @IBOutlet weak var actionButton: UIBarButtonItem!
-    @IBOutlet weak var addingTopToolbar: UIToolbar!
+    @IBOutlet weak var topToolbar: UIToolbar!
     
     
     //MARK: Constants
@@ -36,11 +36,6 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var shiftView: Bool = false
     var currentTextField: UITextField? = nil
     
-    //MARK: Readonly properties
-    var addMode: Bool {
-        return (self.navigationController == nil)
-    }
-    
     //MARK: ViewController Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,12 +52,6 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         self.bottomTextField.defaultTextAttributes = self.memeTextAttributes
         self.bottomTextField.textAlignment = .Center
-        
-        //Add the add mode top tool bar buttons
-        if self.addMode {
-            self.addingTopToolbar.items?.append(UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "actionButtonPressed:"))
-            self.addingTopToolbar.items?.append(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelPressed:"))
-        }
         
     }
     
@@ -100,21 +89,13 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     @IBAction func actionButtonPressed(sender: UIBarButtonItem) {
         
-        //For change mode, call the add mode method
-        self.actionButtonPressed()
-        
-    }
-    
-    //MARK: Programmatic UI Action Handlers
-    @IBAction func actionButtonPressed() {
-        
         self.forceKeyboardClosed()
         let myMemeImage = self.generateMemedImage()
         
         let avc = UIActivityViewController(activityItems: [myMemeImage], applicationActivities: nil)
         avc.completionWithItemsHandler = {
             (activity, success, items, error) in
-            if success && self.addMode {
+            if success {
                 self.saveMeme(myMemeImage)
             }
         }
@@ -127,10 +108,10 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
     }
     
-    @IBAction func cancelPressed() {
+    @IBAction func cancelPressed(sender: UIBarButtonItem) {
+        //Close the keyboard and miss the ViewController
         self.forceKeyboardClosed()
-        //reset the view
-        self.initializeView()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
 
@@ -231,11 +212,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     //MARK: Helper methods
     func generateMemedImage() -> UIImage {
         
-        //Hide toolbars, navbar, and tab bar
-        self.toolbar.hidden = true
-        self.navigationController?.navigationBar.hidden = true
-        self.addingTopToolbar.hidden = true
-        self.tabBarController?.tabBar.hidden = true
+        //Hide toolbars
+        self.topToolbar.hidden = true
+        self.bottomToolbar.hidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -245,11 +224,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        //Show toolbars, navbar, and tab bar
-        self.toolbar.hidden = false
-        self.navigationController?.navigationBar.hidden = false
-        self.addingTopToolbar.hidden = false
-        self.tabBarController?.tabBar.hidden = false
+        //Show toolbars
+        self.topToolbar.hidden = true
+        self.bottomToolbar.hidden = true
         
         return memedImage
     }
