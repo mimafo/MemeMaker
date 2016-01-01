@@ -15,8 +15,10 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     let MemeTableCellTitle = "MemeTableCell"
     let MemeDetailViewControllerID = "MemeDetailViewController"
     let MemeEditViewControllerID = "MemeEditViewController"
+    let DetailSegue = "tableToDetailSegue"
     
-    //MARK: Readonly properties
+    //MARK: Properties
+    var selectedMeme: Meme?
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
     }
@@ -24,8 +26,15 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     //MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
     
+    //MARK: ViewController Methods
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         //Initialize the view controller
+
+        self.navigationItem.title = "Sent Memes"
+        
+        //Set self as the delegate and datasource
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
@@ -35,6 +44,12 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableView.reloadData()
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == self.DetailSegue {
+            let vc = segue.destinationViewController as! MemeDetailViewController
+            vc.meme = self.selectedMeme
+        }
+    }
     
     //MARK: UITableViewDataSource and UITableViewDelegate methods
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -44,13 +59,9 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let meme = self.memes[indexPath.row]
         
         //Set the topText and image
-        cell.textLabel?.text = meme.topText
-        cell.imageView?.image = meme.originalImage
-        
-        //If the cell has a detail label, set it to the bottomText
-        if let detailTextLabel = cell.detailTextLabel {
-            detailTextLabel.text = meme.bottomText
-        }
+        cell.textLabel?.text = (meme.topText.characters.count > 0) ? meme.topText : meme.bottomText;
+        cell.imageView?.contentMode = .ScaleToFill
+        cell.imageView?.image = meme.memeImage
         
         return cell
         
@@ -62,15 +73,9 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        //Grab the Meme ViewController from Storyboard
-        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewControllerID)
-        let vc = object as! MemeDetailViewController
-        
-        //Populate view controller with data from the selected item
-        vc.meme = self.memes[indexPath.row]
-        
-        //Present the view controller using navigation
-        self.navigationController!.showViewController(vc, sender: self)
+        //Set the selected meme and segue
+        self.selectedMeme = self.memes[indexPath.row]
+        self.performSegueWithIdentifier(self.DetailSegue, sender: self)
         
     }
     
@@ -83,4 +88,5 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.presentViewController(vc, animated: true, completion: nil)
         
     }
+    
 }

@@ -14,19 +14,46 @@ class MemeCollectionViewController: UICollectionViewController {
     let MemeCollectionCellTitle = "MemeCollectionViewCell"
     let MemeDetailViewControllerID = "MemeDetailViewController"
     let MemeEditViewControllerID = "MemeEditViewController"
+    let DetailSegue = "collectionToDetailSegue"
     
-    //MARK: Readonly properties
+    //MARK: Outlets
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    
+    //MARK: Properties
+    var selectedMeme: Meme?
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
     }
     
+    //MARK: ViewController methods
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         //Insert initialization code here
+        self.navigationItem.title = "Sent Memes"
+        self.selectedMeme = nil
+        
     }
     
     override func viewWillAppear(animated: Bool) {
+        
+        //Configure the flow layout based on the current orientation
+        self.configureFlowLayout()
+        
         //This is temporary
         self.collectionView?.reloadData()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == self.DetailSegue {
+            let vc = segue.destinationViewController as! MemeDetailViewController
+            vc.meme = self.selectedMeme
+        }
+    }
+    
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        //Call configureFlowLayout whenever the orientation changes
+        self.configureFlowLayout()
     }
     
     //MARK: UICollectionViewDelegate and UICollectionViewDataSource protocol methods
@@ -48,17 +75,14 @@ class MemeCollectionViewController: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        //Grab the Meme ViewController from Storyboard
-        let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeDetailViewControllerID)
-        let vc = object as! MemeDetailViewController
+        //Set the selected meme and segue
+        self.selectedMeme = self.memes[indexPath.row]
+        self.performSegueWithIdentifier(self.DetailSegue, sender: self)
+
         
-        //Populate view controller with data from the selected item
-        vc.meme = self.memes[indexPath.row]
-        
-        //Present the view controller using navigation
-        self.navigationController!.showViewController(vc, sender: self)
     }
     
+    //MARK: UI Action methods
     @IBAction func addPressed(sender: UIBarButtonItem) {
         
         //Grab the Meme ViewController from Storyboard
@@ -66,6 +90,23 @@ class MemeCollectionViewController: UICollectionViewController {
         let vc = object as! MemeEditViewController
         
         self.presentViewController(vc, animated: true, completion: nil)
+        
+    }
+    
+    //MARK: Private methods
+    func configureFlowLayout() {
+        
+        //Define the flow layout
+        let space: CGFloat = 2.0
+        var itemsPerRow: CGFloat = 3.0
+        if UIApplication.sharedApplication().statusBarOrientation == .LandscapeLeft ||
+            UIApplication.sharedApplication().statusBarOrientation == .LandscapeRight {
+                itemsPerRow = 5.0
+        }
+        let dimension = (self.view.frame.width - (2 * space)) / itemsPerRow
+        self.flowLayout.minimumInteritemSpacing = space
+        self.flowLayout.minimumLineSpacing = space / 2
+        self.flowLayout.itemSize = CGSizeMake(dimension, dimension)
         
     }
 }
