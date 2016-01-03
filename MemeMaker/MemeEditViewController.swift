@@ -30,11 +30,17 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName : -3.0
     ]
+    static let kAddMode = 0
+    static let kEditMode = 1
     
     //MARK: variables
     var meme: Meme?
     var shiftView: Bool = false
     var currentTextField: UITextField? = nil
+    var mode = kAddMode
+    var memes: [Meme] {
+        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+    }
     
     //MARK: ViewController Methods
     override func viewDidLoad() {
@@ -52,6 +58,14 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         
         self.bottomTextField.defaultTextAttributes = self.memeTextAttributes
         self.bottomTextField.textAlignment = .Center
+        
+        if let editMeme = self.meme {
+            self.mode = MemeEditViewController.kEditMode
+            self.topTextField.text = editMeme.topText
+            self.bottomTextField.text = editMeme.bottomText
+            self.imagePickerView.image = editMeme.originalImage
+            self.actionButton.enabled = true
+        }
         
     }
     
@@ -243,11 +257,23 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func saveMeme(memeImage: UIImage) {
-        self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
+        let newMeme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
         
         // Add it to the memes array in the Application Delegate
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        appDelegate.memes.append(self.meme!)
+        if self.mode == MemeEditViewController.kAddMode {
+            appDelegate.memes.append(newMeme)
+        } else {
+            var index = 0
+            //Find the meme index so it can be replaced
+            for editMeme in self.memes {
+                if self.meme?.memeImage == editMeme.memeImage {
+                    appDelegate.memes[index] = newMeme
+                    break
+                }
+                index++
+            }
+        }
         
         //Close the view controller
         self.dismissViewControllerAnimated(true, completion: nil)

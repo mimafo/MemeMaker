@@ -106,7 +106,6 @@ class MemeCollectionViewController: UICollectionViewController {
         self.flowLayout.minimumInteritemSpacing = space
         self.flowLayout.minimumLineSpacing = space
         self.flowLayout.itemSize = CGSizeMake(dimension, dimension)
-        print("Dimension: \(dimension)")
         
     }
 }
