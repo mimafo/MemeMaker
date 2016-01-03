@@ -63,7 +63,6 @@ class MemeCollectionViewController: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        //let cell = collectionView.dequeueReusableCellWithReuseIdentifier(self.MemeCollectionCellTitle, forIndexPath: indexPath) as! CustomMemeCell
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(self.MemeCollectionCellTitle, forIndexPath: indexPath) as! MemeCollectionViewCell
         
         //Get the current image and display it
@@ -97,16 +96,17 @@ class MemeCollectionViewController: UICollectionViewController {
     func configureFlowLayout() {
         
         //Define the flow layout
-        let space: CGFloat = 2.0
-        var itemsPerRow: CGFloat = 3.0
+        let space: CGFloat = 1.0
+        var itemsPerRow: CGFloat = 3.5
         if UIApplication.sharedApplication().statusBarOrientation == .LandscapeLeft ||
             UIApplication.sharedApplication().statusBarOrientation == .LandscapeRight {
-                itemsPerRow = 5.0
+                itemsPerRow = 5.5
         }
         let dimension = (self.view.frame.width - (2 * space)) / itemsPerRow
         self.flowLayout.minimumInteritemSpacing = space
-        self.flowLayout.minimumLineSpacing = space / 2
+        self.flowLayout.minimumLineSpacing = space
         self.flowLayout.itemSize = CGSizeMake(dimension, dimension)
+        print("Dimension: \(dimension)")
         
     }
 }

@@ -31,8 +31,8 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         
         //Initialize the view controller
-
         self.navigationItem.title = "Sent Memes"
+        self.tableView.allowsMultipleSelectionDuringEditing = false
         
         //Set self as the delegate and datasource
         self.tableView.delegate = self
@@ -58,9 +58,11 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCellWithIdentifier("MemeTableCell")!
         let meme = self.memes[indexPath.row]
         
-        //Set the topText and image
-        cell.textLabel?.text = (meme.topText.characters.count > 0) ? meme.topText : meme.bottomText;
-        cell.imageView?.contentMode = .ScaleToFill
+        //Set the image text
+        cell.textLabel?.text = (meme.topText.characters.count > 0) ? meme.topText : meme.bottomText
+        cell.detailTextLabel?.text = meme.topText + " ... " + meme.bottomText
+        
+        //Set the image
         cell.imageView?.image = meme.memeImage
         
         return cell
@@ -77,6 +79,19 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.selectedMeme = self.memes[indexPath.row]
         self.performSegueWithIdentifier(self.DetailSegue, sender: self)
         
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+.removeAtIndex(indexPath.row)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        }
     }
     
     //MARK: Action Methods

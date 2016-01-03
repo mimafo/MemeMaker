@@ -15,12 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //MARK: Global variable (Singletons)
     var memes = [Meme]()
-    
-    /*
-    var memes: [Meme] {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
-    }
-    */
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
