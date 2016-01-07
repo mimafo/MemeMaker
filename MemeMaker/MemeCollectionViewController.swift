@@ -19,19 +19,12 @@ class MemeCollectionViewController: UICollectionViewController {
     //MARK: Outlets
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
-    //MARK: Properties
-    var selectedMeme: Meme?
-    var memes: [Meme] {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
-    }
-    
     //MARK: ViewController methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //Insert initialization code here
         self.navigationItem.title = "Sent Memes"
-        self.selectedMeme = nil
         
     }
     
@@ -40,15 +33,8 @@ class MemeCollectionViewController: UICollectionViewController {
         //Configure the flow layout based on the current orientation
         self.configureFlowLayout()
         
-        //This is temporary
+        //Reload collection view display
         self.collectionView?.reloadData()
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == self.DetailSegue {
-            let vc = segue.destinationViewController as! MemeDetailViewController
-            vc.meme = self.selectedMeme
-        }
     }
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -74,8 +60,8 @@ class MemeCollectionViewController: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        //Set the selected meme and segue
-        self.selectedMeme = self.memes[indexPath.row]
+        //Set the selected index and segue
+        self.selectedIndex = indexPath.row
         self.performSegueWithIdentifier(self.DetailSegue, sender: self)
 
         
@@ -87,6 +73,9 @@ class MemeCollectionViewController: UICollectionViewController {
         //Grab the Meme ViewController from Storyboard
         let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeEditViewControllerID)
         let vc = object as! MemeEditViewController
+        
+        //Set selectedIndex to the initialValue to indicate that there is no selected meme
+        self.selectedIndex = self.initialValue
         
         self.presentViewController(vc, animated: true, completion: nil)
         

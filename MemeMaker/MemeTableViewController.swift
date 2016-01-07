@@ -17,14 +17,11 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     let MemeEditViewControllerID = "MemeEditViewController"
     let DetailSegue = "tableToDetailSegue"
     
-    //MARK: Properties
-    var selectedMeme: Meme?
-    var memes: [Meme] {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
-    }
-    
     //MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
+    
+    //MARK: Properties
+    var memesCount: Int = 0
     
     //MARK: ViewController Methods
     override func viewDidLoad() {
@@ -40,15 +37,13 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     override func viewWillAppear(animated: Bool) {
-        //This is temporary
+        //Reload the table display
         self.tableView.reloadData()
+
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == self.DetailSegue {
-            let vc = segue.destinationViewController as! MemeDetailViewController
-            vc.meme = self.selectedMeme
-        }
+    override func viewWillDisappear(animated: Bool) {
+        self.memesCount = self.memes.count
     }
     
     //MARK: UITableViewDataSource and UITableViewDelegate methods
@@ -76,7 +71,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         //Set the selected meme and segue
-        self.selectedMeme = self.memes[indexPath.row]
+        self.selectedIndex = indexPath.row
         self.performSegueWithIdentifier(self.DetailSegue, sender: self)
         
     }
@@ -88,8 +83,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if editingStyle == .Delete {
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            appDelegate.memes.removeAtIndex(indexPath.row)
+            self.appDelegate.memes.removeAtIndex(indexPath.row)
             self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
@@ -99,6 +93,9 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         //Grab the Meme ViewController from Storyboard
         let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeEditViewControllerID)
         let vc = object as! MemeEditViewController
+        
+        //Set selectedIndex to the initialValue to indicate that there is no selected meme
+        self.selectedIndex = self.initialValue
         
         self.presentViewController(vc, animated: true, completion: nil)
         

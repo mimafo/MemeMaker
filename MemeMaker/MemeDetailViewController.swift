@@ -14,28 +14,31 @@ class MemeDetailViewController: UIViewController {
     let MemeEditViewControllerID = "MemeEditViewController"
     
     //MARK: Properties
-    var meme: Meme?
     @IBOutlet weak var imageView: UIImageView!
     
     //MARK: ViewController methods
     override func viewDidLoad() {
-        
-        if let detailMeme = self.meme {
-            self.imageView.image = detailMeme.memeImage
-        }
-        
-        self.navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "editPressed:")
+
+        //Display the view title
+        self.navigationItem.title = "Meme"
         
     }
     
-    func editPressed(sender: UIBarButtonItem) {
+    override func viewWillAppear(animated: Bool) {
+        //Display the selected Meme
+        if let detailMeme = self.selectedMeme {
+            self.imageView.image = detailMeme.memeImage
+        }
+    }
+    
+    //MARK: Action methods
+    @IBAction func editPressed(sender: UIBarButtonItem) {
         
-        //Grab the Meme ViewController from Storyboard
+        //Grab the Edit View Controller from Storyboard
         let object: AnyObject = self.storyboard!.instantiateViewControllerWithIdentifier(self.MemeEditViewControllerID)
         let vc = object as! MemeEditViewController
         
-        //Set the viewcontroller's meme and present the viewcontroller
-        vc.meme = self.meme
+        //Present the edit view controller
         self.presentViewController(vc, animated: true, completion: nil)
     }
     

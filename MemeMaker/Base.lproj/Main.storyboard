@@ -104,12 +104,12 @@
                                 </items>
                             </toolbar>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Pw-cs-FPV">
-                                <rect key="frame" x="20" y="72" width="560" height="484"/>
+                                <rect key="frame" x="20" y="72" width="560" height="476"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="center" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DSK-fz-vlP">
                                 <rect key="frame" x="20" y="96" width="560" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="zx0-qe-m21"/>
+                                    <constraint firstAttribute="height" constant="30" id="F39-5D-pxG"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -134,7 +134,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="center" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbh-As-R7U">
                                 <rect key="frame" x="20" y="496" width="560" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Ytz-xS-pW6"/>
+                                    <constraint firstAttribute="height" constant="30" id="lea-Rd-oe0"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -143,23 +143,22 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Dbh-As-R7U" firstAttribute="trailing" secondItem="DSK-fz-vlP" secondAttribute="trailing" id="20L-ST-LeN"/>
-                            <constraint firstAttribute="trailing" secondItem="uJq-BS-yfY" secondAttribute="trailing" id="5ka-Z1-Hct"/>
-                            <constraint firstItem="Dbh-As-R7U" firstAttribute="leading" secondItem="DSK-fz-vlP" secondAttribute="leading" id="8fD-f1-xad"/>
-                            <constraint firstItem="uJq-BS-yfY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9uZ-hc-Vdi"/>
-                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="leading" secondItem="Dbh-As-R7U" secondAttribute="leading" id="BBZ-li-Apx"/>
-                            <constraint firstItem="uJq-BS-yfY" firstAttribute="trailing" secondItem="PeR-aH-fWy" secondAttribute="trailing" id="Ejv-hv-JdM"/>
-                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="trailing" secondItem="DSK-fz-vlP" secondAttribute="trailing" id="FWM-nv-Qsl"/>
-                            <constraint firstItem="PeR-aH-fWy" firstAttribute="leading" secondItem="uJq-BS-yfY" secondAttribute="leading" id="GFU-uK-ENK"/>
-                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="top" secondItem="uJq-BS-yfY" secondAttribute="bottom" constant="8" id="Mf3-TY-tw5"/>
-                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="top" secondItem="DSK-fz-vlP" secondAttribute="bottom" constant="-54" id="OJl-iK-086"/>
-                            <constraint firstItem="PeR-aH-fWy" firstAttribute="top" secondItem="7Pw-cs-FPV" secondAttribute="bottom" id="Osu-JV-9bA"/>
-                            <constraint firstItem="DSK-fz-vlP" firstAttribute="leading" secondItem="7Pw-cs-FPV" secondAttribute="leading" id="RkJ-HV-muV"/>
-                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="auP-Bl-ekI"/>
-                            <constraint firstItem="uJq-BS-yfY" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="e4a-52-ZzK"/>
-                            <constraint firstItem="Dbh-As-R7U" firstAttribute="top" secondItem="7Pw-cs-FPV" secondAttribute="bottom" constant="-60" id="qSE-9J-IV3"/>
-                            <constraint firstItem="PeR-aH-fWy" firstAttribute="centerX" secondItem="Dbh-As-R7U" secondAttribute="centerX" id="xfd-DB-Qpn"/>
-                            <constraint firstItem="PeR-aH-fWy" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="ybN-ym-ioH"/>
+                            <constraint firstItem="DSK-fz-vlP" firstAttribute="leading" secondItem="Dbh-As-R7U" secondAttribute="leading" id="2DB-6K-u7W"/>
+                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="leading" secondItem="DSK-fz-vlP" secondAttribute="leading" id="2xP-SV-iwe"/>
+                            <constraint firstItem="Dbh-As-R7U" firstAttribute="centerX" secondItem="PeR-aH-fWy" secondAttribute="centerX" id="5Xs-Ul-YpS"/>
+                            <constraint firstItem="PeR-aH-fWy" firstAttribute="top" secondItem="7Pw-cs-FPV" secondAttribute="bottom" constant="8" id="8Jw-Sy-Lb4"/>
+                            <constraint firstItem="PeR-aH-fWy" firstAttribute="top" secondItem="Dbh-As-R7U" secondAttribute="bottom" constant="30" id="9sw-Hu-8Fe"/>
+                            <constraint firstItem="DSK-fz-vlP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Ao4-iM-Hox"/>
+                            <constraint firstItem="uJq-BS-yfY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Eje-oL-NM7"/>
+                            <constraint firstAttribute="trailing" secondItem="PeR-aH-fWy" secondAttribute="trailing" id="ExV-uu-zge"/>
+                            <constraint firstItem="PeR-aH-fWy" firstAttribute="trailing" secondItem="uJq-BS-yfY" secondAttribute="trailing" id="NIA-8E-tHO"/>
+                            <constraint firstItem="DSK-fz-vlP" firstAttribute="top" secondItem="uJq-BS-yfY" secondAttribute="bottom" constant="32" id="T04-sk-yHl"/>
+                            <constraint firstItem="uJq-BS-yfY" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="XCN-82-DlJ"/>
+                            <constraint firstItem="7Pw-cs-FPV" firstAttribute="top" secondItem="uJq-BS-yfY" secondAttribute="bottom" constant="8" id="g9S-MA-As2"/>
+                            <constraint firstItem="Dbh-As-R7U" firstAttribute="trailing" secondItem="7Pw-cs-FPV" secondAttribute="trailing" id="mj8-Hm-732"/>
+                            <constraint firstItem="PeR-aH-fWy" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="y1f-4R-Opj"/>
+                            <constraint firstItem="Dbh-As-R7U" firstAttribute="trailing" secondItem="DSK-fz-vlP" secondAttribute="trailing" id="y5o-cs-Ube"/>
+                            <constraint firstItem="uJq-BS-yfY" firstAttribute="leading" secondItem="PeR-aH-fWy" secondAttribute="leading" id="yqc-pD-Bp8"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="uML-0S-mlz"/>
@@ -191,17 +190,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q6H-KW-vkg">
-                                <rect key="frame" x="20" y="64" width="560" height="487"/>
+                                <rect key="frame" x="20" y="72" width="560" height="479"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="q6H-KW-vkg" firstAttribute="trailing" secondItem="Qjf-Rd-a8b" secondAttribute="trailingMargin" id="0la-Ys-WI3"/>
-                            <constraint firstItem="q6H-KW-vkg" firstAttribute="bottom" secondItem="VYV-QO-roe" secondAttribute="top" id="YsQ-Vm-5au"/>
-                            <constraint firstItem="q6H-KW-vkg" firstAttribute="top" secondItem="1Hi-bo-EWo" secondAttribute="bottom" id="gtr-6I-E8j"/>
+                            <constraint firstItem="q6H-KW-vkg" firstAttribute="bottom" secondItem="VYV-QO-roe" secondAttribute="top" constant="-5" id="YsQ-Vm-5au"/>
+                            <constraint firstItem="q6H-KW-vkg" firstAttribute="top" secondItem="1Hi-bo-EWo" secondAttribute="bottom" constant="8" id="gtr-6I-E8j"/>
                             <constraint firstItem="q6H-KW-vkg" firstAttribute="leading" secondItem="Qjf-Rd-a8b" secondAttribute="leadingMargin" id="xRc-qr-I4p"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="PEg-ga-a5Q">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="zgX-28-yRM">
+                            <connections>
+                                <action selector="editPressed:" destination="dXh-nR-QT8" id="Jrf-9P-QoF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="imageView" destination="q6H-KW-vkg" id="fvf-6f-dfq"/>
                     </connections>
@@ -325,6 +333,6 @@
         <image name="Table" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="FjV-Do-fsF"/>
+        <segue reference="17T-m0-Yhd"/>
     </inferredMetricsTieBreakers>
 </document>
