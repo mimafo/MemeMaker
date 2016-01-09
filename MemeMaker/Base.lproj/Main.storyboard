@@ -154,6 +154,7 @@
                             <constraint firstItem="PeR-aH-fWy" firstAttribute="trailing" secondItem="uJq-BS-yfY" secondAttribute="trailing" id="NIA-8E-tHO"/>
                             <constraint firstItem="DSK-fz-vlP" firstAttribute="top" secondItem="uJq-BS-yfY" secondAttribute="bottom" constant="32" id="T04-sk-yHl"/>
                             <constraint firstItem="uJq-BS-yfY" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="XCN-82-DlJ"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="7Pw-cs-FPV" secondAttribute="leading" id="aEc-XB-dc8"/>
                             <constraint firstItem="7Pw-cs-FPV" firstAttribute="top" secondItem="uJq-BS-yfY" secondAttribute="bottom" constant="8" id="g9S-MA-As2"/>
                             <constraint firstItem="Dbh-As-R7U" firstAttribute="trailing" secondItem="7Pw-cs-FPV" secondAttribute="trailing" id="mj8-Hm-732"/>
                             <constraint firstItem="PeR-aH-fWy" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="y1f-4R-Opj"/>
@@ -161,7 +162,6 @@
                             <constraint firstItem="uJq-BS-yfY" firstAttribute="leading" secondItem="PeR-aH-fWy" secondAttribute="leading" id="yqc-pD-Bp8"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="uML-0S-mlz"/>
                     <connections>
                         <outlet property="actionButton" destination="M0u-Ua-Y8k" id="HEa-4C-8fY"/>
                         <outlet property="bottomTextField" destination="Dbh-As-R7U" id="xd0-i8-JSI"/>
@@ -189,7 +189,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q6H-KW-vkg">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q6H-KW-vkg">
                                 <rect key="frame" x="20" y="72" width="560" height="479"/>
                             </imageView>
                         </subviews>

@@ -37,6 +37,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     var shiftView: Bool = false
     var currentTextField: UITextField? = nil
     var mode = kAddMode
+    var workingImage: UIImage?
     
     //MARK: ViewController Methods
     override func viewDidLoad() {
@@ -59,7 +60,9 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
             self.mode = MemeEditViewController.kEditMode
             self.topTextField.text = editMeme.topText
             self.bottomTextField.text = editMeme.bottomText
-            self.imagePickerView.image = editMeme.originalImage
+            self.workingImage = editMeme.originalImage.scaleToSize(self.imagePickerView.bounds.size)
+            self.setImage()
+            //self.imagePickerView.image = editMeme.originalImage
             self.actionButton.enabled = true
         }
         
@@ -72,6 +75,10 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     
     override func viewWillDisappear(animated: Bool) {
         self.unsubscribeFromKeyboardNotifications()
+    }
+    
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        self.setImage()
     }
     
     
@@ -136,7 +143,8 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         }
         
         if let image = info[keyString] as? UIImage {
-            self.imagePickerView.image = image
+            self.workingImage = image
+            self.setImage()
             self.actionButton.enabled = true
         }
 
@@ -252,7 +260,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func saveMeme(memeImage: UIImage) {
-        let myMeme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
+        let myMeme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.workingImage!, memeImage: memeImage)
         
         // Add it to the memes array in the Application Delegate
         if self.mode == MemeEditViewController.kAddMode {
@@ -271,6 +279,16 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         if let textField = self.currentTextField {
             textField.resignFirstResponder()
         }
+    }
+    
+    func setImage() {
+        
+        if let image = self.workingImage {
+            
+            self.imagePickerView.image = image
+
+        }
+        
     }
 
 
