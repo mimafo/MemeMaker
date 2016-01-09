@@ -57,8 +57,8 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.textLabel?.text = (meme.topText.characters.count > 0) ? meme.topText : meme.bottomText
         cell.detailTextLabel?.text = meme.topText + " ... " + meme.bottomText
         
-        //Set the image
-        cell.imageView?.image = meme.memeImage
+        //Set the image, use the original image for better quality and consistent sizing
+        cell.imageView?.image = meme.originalImage
         
         return cell
         

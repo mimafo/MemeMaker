@@ -26,21 +26,17 @@ class MemeCollectionViewController: UICollectionViewController {
         //Insert initialization code here
         self.navigationItem.title = "Sent Memes"
         
+        self.configureFlowLayout()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         
-        //Configure the flow layout based on the current orientation
-        self.configureFlowLayout()
-        
-        //Reload collection view display
+        //Reload data in case items were added, delete, or edited
         self.collectionView?.reloadData()
+        
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        //Call configureFlowLayout whenever the orientation changes
-        self.configureFlowLayout()
-    }
     
     //MARK: UICollectionViewDelegate and UICollectionViewDataSource protocol methods
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -86,12 +82,9 @@ class MemeCollectionViewController: UICollectionViewController {
         
         //Define the flow layout
         let space: CGFloat = 1.0
-        var itemsPerRow: CGFloat = 3.5
-        if UIApplication.sharedApplication().statusBarOrientation == .LandscapeLeft ||
-            UIApplication.sharedApplication().statusBarOrientation == .LandscapeRight {
-                itemsPerRow = 5.5
-        }
-        let dimension = (self.view.frame.width - (2 * space)) / itemsPerRow
+        let itemsFactor: CGFloat = 3.5
+        
+        let dimension = (self.view.frame.width - (2 * space)) / itemsFactor
         self.flowLayout.minimumInteritemSpacing = space
         self.flowLayout.minimumLineSpacing = space
         self.flowLayout.itemSize = CGSizeMake(dimension, dimension)

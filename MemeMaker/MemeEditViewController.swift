@@ -243,8 +243,8 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         UIGraphicsEndImageContext()
         
         //Show toolbars
-        self.topToolbar.hidden = true
-        self.bottomToolbar.hidden = true
+        self.topToolbar.hidden = false
+        self.bottomToolbar.hidden = false
         
         return memedImage
     }
