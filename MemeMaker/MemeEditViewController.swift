@@ -60,9 +60,8 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
             self.mode = MemeEditViewController.kEditMode
             self.topTextField.text = editMeme.topText
             self.bottomTextField.text = editMeme.bottomText
-            self.workingImage = editMeme.originalImage.scaleToSize(self.imagePickerView.bounds.size)
+            self.workingImage = editMeme.originalImage
             self.setImage()
-            //self.imagePickerView.image = editMeme.originalImage
             self.actionButton.enabled = true
         }
         
@@ -76,11 +75,6 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     override func viewWillDisappear(animated: Bool) {
         self.unsubscribeFromKeyboardNotifications()
     }
-    
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        self.setImage()
-    }
-    
     
     //MARK: UI Action handlers
     @IBAction func pickButtonPressed(sender: UIBarButtonItem) {
@@ -208,16 +202,16 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         if let textField = self.currentTextField {
             if textField == self.bottomTextField {
                 view.frame.origin.y -= getKeyboardHeight(notification)
+                self.shiftView = true
             }
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
         //Only shift the view if the currentTextField is the bottomTextField
-        if let textField = self.currentTextField {
-            if textField == self.bottomTextField {
+        if self.shiftView {
                 view.frame.origin.y += getKeyboardHeight(notification)
-            }
+                self.shiftView = false
         }
     }
     
@@ -256,6 +250,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         self.bottomTextField.text = self.defaultBottomText
         self.imagePickerView.image = nil
         self.actionButton.enabled = false
+        self.shiftView = false
         
     }
     

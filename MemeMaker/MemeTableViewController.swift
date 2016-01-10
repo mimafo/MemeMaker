@@ -37,7 +37,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     override func viewWillAppear(animated: Bool) {
-        //Reload the table display
+        //Reload data in case items were added, delete, or edited
         self.tableView.reloadData()
 
     }
