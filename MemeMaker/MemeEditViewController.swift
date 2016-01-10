@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate  {
+class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate  {
 
     //MARK: UI outlets
     @IBOutlet weak var photoPickButton: UIBarButtonItem!
@@ -16,8 +16,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var imagePickerView: UIImageView!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
-    @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var bottomToolbar: UIToolbar!
     @IBOutlet weak var actionButton: UIBarButtonItem!
+    @IBOutlet weak var topToolbar: UIToolbar!
     
     
     //MARK: Constants
@@ -29,11 +30,14 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName : -3.0
     ]
+    static let kAddMode = 0
+    static let kEditMode = 1
     
     //MARK: variables
-    var meme: Meme?
     var shiftView: Bool = false
     var currentTextField: UITextField? = nil
+    var mode = kAddMode
+    var workingImage: UIImage?
     
     //MARK: ViewController Methods
     override func viewDidLoad() {
@@ -52,6 +56,15 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.bottomTextField.defaultTextAttributes = self.memeTextAttributes
         self.bottomTextField.textAlignment = .Center
         
+        if let editMeme = self.selectedMeme {
+            self.mode = MemeEditViewController.kEditMode
+            self.topTextField.text = editMeme.topText
+            self.bottomTextField.text = editMeme.bottomText
+            self.workingImage = editMeme.originalImage
+            self.setImage()
+            self.actionButton.enabled = true
+        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -62,7 +75,6 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewWillDisappear(animated: Bool) {
         self.unsubscribeFromKeyboardNotifications()
     }
-    
     
     //MARK: UI Action handlers
     @IBAction func pickButtonPressed(sender: UIBarButtonItem) {
@@ -98,14 +110,19 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 self.saveMeme(myMemeImage)
             }
         }
-        self.navigationController?.presentViewController(avc, animated: true, completion: nil)
+        
+        if self.navigationController == nil {
+            self.presentViewController(avc, animated: true, completion: nil)
+        } else {
+            self.navigationController?.presentViewController(avc, animated: true, completion: nil)
+        }
         
     }
-
+    
     @IBAction func cancelPressed(sender: UIBarButtonItem) {
+        //Close the keyboard and miss the ViewController
         self.forceKeyboardClosed()
-        //reset the view
-        self.initializeView()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
 
@@ -120,7 +137,8 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
         
         if let image = info[keyString] as? UIImage {
-            self.imagePickerView.image = image
+            self.workingImage = image
+            self.setImage()
             self.actionButton.enabled = true
         }
 
@@ -184,16 +202,16 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         if let textField = self.currentTextField {
             if textField == self.bottomTextField {
                 view.frame.origin.y -= getKeyboardHeight(notification)
+                self.shiftView = true
             }
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
         //Only shift the view if the currentTextField is the bottomTextField
-        if let textField = self.currentTextField {
-            if textField == self.bottomTextField {
+        if self.shiftView {
                 view.frame.origin.y += getKeyboardHeight(notification)
-            }
+                self.shiftView = false
         }
     }
     
@@ -206,9 +224,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     //MARK: Helper methods
     func generateMemedImage() -> UIImage {
         
-        //Hide toolbar and navbar
-        self.toolbar.hidden = true
-        self.navigationController?.navigationBar.hidden = true
+        //Hide toolbars
+        self.topToolbar.hidden = true
+        self.bottomToolbar.hidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -218,9 +236,9 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        //Show toolbar and navbar
-        self.toolbar.hidden = false
-        self.navigationController?.navigationBar.hidden = false
+        //Show toolbars
+        self.topToolbar.hidden = false
+        self.bottomToolbar.hidden = false
         
         return memedImage
     }
@@ -232,20 +250,40 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.bottomTextField.text = self.defaultBottomText
         self.imagePickerView.image = nil
         self.actionButton.enabled = false
-        self.meme = nil
+        self.shiftView = false
         
     }
     
     func saveMeme(memeImage: UIImage) {
-        self.meme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.imagePickerView.image!, memeImage: memeImage)
-        //Proof that the Meme is being saved
-        print("Meme info: \(self.meme?.topText) \(self.meme?.bottomText) \(self.meme?.originalImage) \(self.meme?.memeImage)")
+        let myMeme = Meme(topText: self.topTextField.text!, bottomText: self.bottomTextField.text!, originalImage: self.workingImage!, memeImage: memeImage)
+        
+        // Add it to the memes array in the Application Delegate
+        if self.mode == MemeEditViewController.kAddMode {
+            self.appDelegate.memes.append(myMeme)
+            self.selectedIndex = self.memes.count - 1
+        } else {
+            self.appDelegate.memes[self.selectedIndex] = myMeme
+        }
+        
+        //Close the view controller
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     func forceKeyboardClosed() {
         if let textField = self.currentTextField {
             textField.resignFirstResponder()
         }
+    }
+    
+    func setImage() {
+        
+        if let image = self.workingImage {
+            
+            self.imagePickerView.image = image
+
+        }
+        
     }
 
 
